@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Gidde
+GenericName=Gidde
+Comment=Test
+Categories=Utility;Education;
+Exec=com.github.laloinsane.gidde
+Icon=application-default-icon
+Terminal=false
+Type=Application
+Keywords=Gidde;
