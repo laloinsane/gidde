@@ -2,7 +2,7 @@
 Name=Gidde
 GenericName=Gidde
 Comment=Test
-Categories=Utility;Education;
+Categories=Utility;Development;
 Exec=com.github.laloinsane.gidde
 Icon=application-default-icon
 Terminal=false

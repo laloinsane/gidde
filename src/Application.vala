@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2011-2018 Your Organization (https://yourwebsite.com)
+* Copyright (c) 2011-2018 Your Organization (https://dev-manage.com)
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public
@@ -16,11 +16,11 @@
 * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA 02110-1301 USA
 *
-* Authored by: Author <author@example.com>
+* Authored by: Michel Calisto <calisto.michel@gmail.com>
 */
 
-public class Gidde : Gtk.Application {
-    public Gidde () {
+public class Gidde.Application : Gtk.Application {
+    public Application () {
         Object (
             application_id: "com.github.laloinsane.gidde",
             flags: ApplicationFlags.FLAGS_NONE
@@ -28,17 +28,11 @@ public class Gidde : Gtk.Application {
     }
 
     protected override void activate () {
-        var main_window = new Gtk.ApplicationWindow (this) {
-            default_height = 300,
-            default_width = 300,
-            title = "Gidde"
-        };
-        var label = new Gtk.Label ("Hello Again World!");
-        main_window.add (label);
-        main_window.show_all ();
+        var main_window = new Gidde.MainWindow (this);
+        add_window (main_window);
     }
 
     public static int main (string[] args) {
-        return new Gidde ().run (args);
+        return new Application ().run (args);
     }
 }
