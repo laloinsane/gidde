@@ -42,17 +42,19 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
             while ((name = dir.read_name ()) != null) {
                 string path = Path.build_filename (directory, name);
                 if (FileUtils.test (path, FileTest.IS_REGULAR)) {
-                    string read;
-                    FileUtils.get_contents (path, out read);
+                    if (".gdd" in name) {            
+                        string read;
+                        FileUtils.get_contents (path, out read);
 
-                    var view = new Gtk.ScrolledWindow(null, null);
-                    view.set_border_width(5);
-                    
-                    var text = new Gtk.TextView();
-                    text.get_buffer().set_text(read);
-                    view.add (text);
+                        var view = new Gtk.ScrolledWindow(null, null);
+                        view.set_border_width(5);
+                        
+                        var text = new Gtk.TextView();
+                        text.get_buffer().set_text(read);
+                        view.add (text);
 
-                    main_stack.add_titled (view, name, name);
+                        main_stack.add_titled (view, name, name);
+                    }
                 }
             }
         } catch (FileError err) {
