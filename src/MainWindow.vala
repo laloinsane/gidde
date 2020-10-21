@@ -51,11 +51,11 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
                         string line;
                         var tag = "";
                         var code_out = "</code></pre></div>";
-                        var h_in = "<h1>";
-                        var h_out = "</h1>";
-                        var i_in = "<h4>";
-                        var i_out = "</h4>";
-                        var docu = "
+                        var title_in = "<h3>";
+                        var title_out = "</h3>";
+                        var paragraph_in = "<p>";
+                        var paragraph_out = "</p>";
+                        var final_html = "
                         <!DOCTYPE html>
                         <html>
                             <body style=\"margin: 10px\">
@@ -90,33 +90,39 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
                                 -webkit-border-radius: 6px 6px 6px 6px;
                                 -moz-border-radius: 6px 6px 6px 6px;
                                 border-radius: 6px 6px 6px 6px\">
-                        <button style=\"margin: 10px;\" onclick=\"copy("+string_number+")\">Copiar</button>
+                        <button style=\"margin: 10px;
+                                        color: #2B2B2B;
+                                        background-color: #fff;\" onclick=\"copy("+string_number+")\">Copiar</button>
                         <pre style=\"padding: 0px 10px;\">
                             <code id=\""+string_number+"\">
                                 ";
                             if ("#" in line) {
-                                line = tag + h_in + line;
-                                tag = h_out;
-                            }else{
+                                line = tag + title_in + line;
+                                tag = title_out;
+                            } else {
                                 if (".." in line) {
                                     line = tag + code_in + line;
                                     tag = code_out;
-                                }else{
+                                } else {
                                     if ("**" in line) {
-                                        line = tag + i_in + line;
-                                        tag = i_out;
+                                        line = tag + paragraph_in + line;
+                                        tag = paragraph_out;
+                                    } else {
+                                        if (tag == title_out || tag == paragraph_out || tag == code_out) {
+                                            line = "<br>" + line;
+                                        }
                                     }
                                 }
                             }
-                            docu = docu  + line;
+                            final_html = final_html  + line;
                             stdout.printf ("%s\n", line);
                             count = count + 1;
                         }
-                        docu = docu  + tag + end;
-                        stdout.printf ("%s\n", docu);
+                        final_html = final_html + tag + end;
+                        stdout.printf ("%s\n", final_html);
 
                         var view = new WebKit.WebView();
-                        view.load_html(docu, null);
+                        view.load_html(final_html, null);
                         main_stack.add_titled (view, name, name);
                     }
                 }
