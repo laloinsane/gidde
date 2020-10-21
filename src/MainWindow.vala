@@ -91,32 +91,41 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
                                 -moz-border-radius: 6px 6px 6px 6px;
                                 border-radius: 6px 6px 6px 6px\">
                         <button style=\"margin: 10px;
+                                        right: 10px;
+                                        position: absolute;
                                         color: #2B2B2B;
                                         background-color: #fff;\" onclick=\"copy("+string_number+")\">Copiar</button>
-                        <pre style=\"padding: 0px 10px;\">
+                        <pre style=\"padding: 10px 10px;\">
                             <code id=\""+string_number+"\">
                                 ";
                             if ("#" in line) {
-                                line = tag + title_in + line;
+                                string res = line.replace ("#", "");
+                                line = tag + title_in + res;
                                 tag = title_out;
                             } else {
                                 if (".." in line) {
-                                    line = tag + code_in + line;
+                                    string res = line.replace ("..", "");
+                                    line = tag + code_in + res;
                                     tag = code_out;
                                 } else {
                                     if ("**" in line) {
-                                        line = tag + paragraph_in + line;
+                                        string res = line.replace ("**", "");
+                                        line = tag + paragraph_in + res;
                                         tag = paragraph_out;
                                     } else {
-                                        if (tag == title_out || tag == paragraph_out || tag == code_out) {
-                                            line = "<br>" + line;
+                                        if (line != "") {
+                                            if (tag == title_out || tag == paragraph_out || tag == code_out) {
+                                                line = "<br>" + line;
+                                            }
                                         }
                                     }
                                 }
                             }
-                            final_html = final_html  + line;
-                            stdout.printf ("%s\n", line);
-                            count = count + 1;
+                            if (line != "") {
+                                final_html = final_html  + line;
+                                stdout.printf ("%s\n", line);
+                                count = count + 1;
+                            }
                         }
                         final_html = final_html + tag + end;
                         stdout.printf ("%s\n", final_html);
