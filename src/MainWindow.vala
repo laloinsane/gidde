@@ -43,42 +43,57 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
             while ((name = dir.read_name ()) != null) {
                 string path = Path.build_filename (directory, name);
                 if (FileUtils.test (path, FileTest.IS_REGULAR)) {
-                    if (".gdd" in name) {            
-                        //  string read;
-                        //  FileUtils.get_contents (path, out read);
-
-                        //  var view = new WebKit.WebView();
-                        //  view.load_html(read, read);
-                        //  main_stack.add_titled (view, name, name);
-
-
-                        // Open file for reading and wrap returned FileInputStream into a
-                        // DataInputStream, so we can read line by line
+                    if (".gmd" in name) {
+                        string read;
+                        FileUtils.get_contents (path, out read);
                         var file = File.new_for_path (path);
                         var dis = new DataInputStream (file.read ());
                         string line;
-                        // Read lines until end of file (null) is reached
                         var tag = "";
-                        var code_in = "<code>";
-                        var code_out = "</code>";
+                        var code_out = "</code></pre></div>";
                         var h_in = "<h1>";
                         var h_out = "</h1>";
                         var i_in = "<h4>";
                         var i_out = "</h4>";
-                        var docu = "";
+                        var docu = "
+                        <!DOCTYPE html>
+                        <html>
+                            <body style=\"margin: 10px\">
+                        ";
+                        var end = "
+                        <script>
+                        function copy(id) {
+                            let div = document.getElementById(id);
+                            let text = div.innerText;
+                            let textArea  = document.createElement('textarea');
+                            textArea.width  = \"1px\"; 
+                            textArea.height = \"1px\";
+                            textArea.background =  \"transparents\" ;
+                            textArea.value = text;
+                            document.body.append(textArea);
+                            textArea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textArea);
+                        }
+                    </script>
+                </body>
+            </html>
+                        ";
+                        int count = 0;
                         while ((line = dis.read_line (null)) != null) {
-                            //  if ("#" in line) {
-                            //      line = tag + h_in + line;
-                            //      tag = h_out;
-                            //  }
-                            //  if (".." in line) {
-                            //      line = tag + code_in + line;
-                            //      tag = code_out;
-                            //  }
-                            //  if ("**" in line) {
-                            //      line = tag + i_in + line;
-                            //      tag = i_out;
-                            //  }
+                            string string_number = count.to_string();
+                                var code_in = "<div style=\"margin: 10px 0px;
+                                font-size: 1em;
+                                line-height: 1.3;
+                                color: #fff;
+                                background-color: #2B2B2B;
+                                -webkit-border-radius: 6px 6px 6px 6px;
+                                -moz-border-radius: 6px 6px 6px 6px;
+                                border-radius: 6px 6px 6px 6px\">
+                        <button style=\"margin: 10px;\" onclick=\"copy("+string_number+")\">Copiar</button>
+                        <pre style=\"padding: 0px 10px;\">
+                            <code id=\""+string_number+"\">
+                                ";
                             if ("#" in line) {
                                 line = tag + h_in + line;
                                 tag = h_out;
@@ -95,26 +110,17 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
                             }
                             docu = docu  + line;
                             stdout.printf ("%s\n", line);
+                            count = count + 1;
                         }
-                        docu = docu  + tag;
+                        docu = docu  + tag + end;
                         stdout.printf ("%s\n", docu);
 
                         var view = new WebKit.WebView();
-                        view.load_html(docu, docu);
+                        view.load_html(docu, null);
                         main_stack.add_titled (view, name, name);
-
-
-
-                        //  var view = new Gtk.ScrolledWindow(null, null);
-                        //  view.set_border_width(5);
-                        
-                        //  var text = new Gtk.TextView();
-                        //  text.get_buffer().set_text(read);
-                        //  view.add (text);
-
-                        //  main_stack.add_titled (view, name, name);
                     }
                 }
+
             }
         } catch (FileError err) {
             stderr.printf (err.message);
