@@ -20,6 +20,17 @@
 */
 
 public class Gidde.HeaderBar : Gtk.HeaderBar {
+    public MainWindow main_window {
+        get;
+        construct;
+    }
+    
+    public HeaderBar (MainWindow window) {
+        Object (
+            main_window: window
+        );
+    }
+
     construct {
         title = "Gidde";
         has_subtitle = false;
@@ -28,5 +39,19 @@ public class Gidde.HeaderBar : Gtk.HeaderBar {
         var settings_button = new Gtk.Button.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR);
         settings_button.valign = Gtk.Align.CENTER;
         pack_end (settings_button);
+
+        settings_button.clicked.connect (open_modal);
+    }
+
+    public void open_modal () {
+        var modal = new Gtk.Dialog.with_buttons (
+            "Add a new note",
+            main_window,
+            Gtk.DialogFlags.MODAL | 
+            Gtk.DialogFlags.DESTROY_WITH_PARENT |
+            Gtk.DialogFlags.USE_HEADER_BAR
+        );
+        modal.show_all ();
+        modal.present ();
     }
 }
