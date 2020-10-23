@@ -30,9 +30,6 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
         default_height = 600;
         default_width = 900;
 
-        var header_bar = new Gidde.HeaderBar ();
-        set_titlebar (header_bar);
-
         var stack_sidebar = new Gtk.StackSidebar ();
         var main_stack = new Gtk.Stack ();
 
@@ -148,6 +145,9 @@ public class Gidde.MainWindow : Gtk.ApplicationWindow {
         paned.add2 (main_stack);
         
         add (paned);
+
+        var header_bar = new Gidde.HeaderBar (this);
+        set_titlebar (header_bar);
 
         show_all ();
     }
